@@ -4,24 +4,21 @@ $username = "vuluser";
 $password = "vulpass";
 $dbname = "yorum_sayfasi_db";
 
-// MySQL bağlantısı oluştur
+// MySQL bağlantısı
 $conn = new mysqli($servername, $username, $password, $dbname);
 
-// Bağlantıyı kontrol et
+
 if ($conn->connect_error) {
     die("Bağlantı hatası: " . $conn->connect_error);
 }
 
-// Yeni yorum eklemek için form gönderildi mi kontrol et
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $kullanici_adi = $conn->real_escape_string($_POST['username']);
     $yorum = $conn->real_escape_string($_POST['comment']);
 
-    // SQL sorgusu ile veritabanına ekle
     $sql = "INSERT INTO yorumlar (kullanici_adi, yorum) VALUES ('$kullanici_adi', '$yorum')";
 
     if ($conn->query($sql) === TRUE) {
-        // Yorum eklendikten sonra index.php'ye yönlendir
         header('Location: index.php');
         exit();
     } else {
@@ -29,7 +26,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-// Yorumları veritabanından çek
 $sql = "SELECT kullanici_adi, yorum, tarih FROM yorumlar ORDER BY tarih DESC";
 $result = $conn->query($sql);
 
